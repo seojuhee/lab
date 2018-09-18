@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Daum Live Ranking</title>
+	<style type="text/css">
+		*{margin:0;padding:0}
+		.list_rank{width:300px;margin:50px auto;padding:20px;background-color:#eaeaea;list-style:none}
+		.list_rank li ~ li{margin-top:7px}
+		.list_rank .link_rank{display:block;padding:5px;color:#444;background-color:#fff;text-decoration:none;box-shadow:1px 1px 3px 0px rgba(50, 50, 50, 0.2)}
+		.list_rank .num_rank{display:inline-block;margin-right:6px;padding:3px 9px 1px;color:#fff;background-color:#000}
+	</style>
+</head>
+<body>
+	<span class="txt_date">여기시간</span>
+	<ol class="list_rank">
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:;" class="link_rank">
+				<span class="num_rank">1</span><span class="txt_rank">내가바로일등</span>
+			</a>
+		</li>
+	</ol>
+
+
+	<script type="text/javascript">
+		(function(exports, doc) {
+			'use strict';
+
+			//선언부
+
+			//실행부
+			requestApiByHXR('GET','http://172.28.31.229:3000/crawl', getData);
+
+			//함수부
+			function $(target){
+				return Array.prototype.slice.call(doc.querySelectorAll(target)); //해당쿼리애들을 전부 잡아서 객체로 싸서 보내줌
+			}
+
+			function requestApiByHXR(type, url, getData){
+				var xhr = new XMLHttpRequest();
+				xhr.addEventListener("readystatechange", function(){
+				if(this.readyState === 4){
+					getData(JSON.parse(this.responseText));
+				}
+				});
+				xhr.open(type, url);
+				xhr.setRequestHeader("content-type", "application/json");
+				xhr.setRequestHeader("cache-control", "no-cache");
+				xhr.send();
+			}
+
+			function getData(data){
+				console.log(data);
+				setRank(data);
+				setText(data);
+				setDate(data);
+			}
+
+			function setRank(data){
+				var elNumRanks = $('.list_rank .num_rank');
+				elNumRanks.forEach(function(rank, idx){
+					rank.innerText = data[0].data[idx].rank;
+				});
+			}
+			function setText(data){
+				$('.list_rank .txt_rank').forEach(function(rank, idx){
+					rank.innerText = data[0].data[idx].el;
+				});
+			}
+
+			function setDate(data){
+				$('.txt_date')[0].innerText = data[0].date.split('T')[1].split('.')[0];
+			}
+
+
+		})(window,document);
+	</script>
+</body>
+</html>

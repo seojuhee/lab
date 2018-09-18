@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<div id="box" style="width:300px;height:300px;border:2px solid red"></div>
+	<button id="btn">클릭</button>
+</body>
+<script>
+	'use strict';
+	window.onload = function(){
+		(function(exports,doc){
+			//var
+			var state = {
+				bgColor:'skyblue'
+			};
+			var eventPool = {};
+			var box = doc.getElementById('box');
+			var btn = doc.getElementById('btn'); 
+			//실행
+			init();
+
+			//함수
+			function init(){
+				console.log('init');
+				//초기설정
+				draw(box);
+				//이벤트 등록
+				bindEvents();
+			}
+			function bindEvents(){
+				console.log('bind events');
+				addEvent('levi:changebackgorund',changeBg);
+
+				btn.addEventListener('click',function(){
+					console.log('버튼클릭');
+					trigger('levi:changebackgorund');
+				})
+			}
+			function setState(newState){
+				Object.assign(state,newState);
+				console.log('state updated');
+				console.table(state);
+			};
+			function addEvent(eventType,action){
+				eventPool[eventType] = action;
+				console.log('added event');
+				console.dir(eventPool);
+			};
+			function trigger(eventType){
+				if(eventPool[eventType]){
+					eventPool[eventType].call(this,eventType);	
+				}
+			};
+			function draw(target){
+				console.log('draw target');
+				target.style.backgroundColor = state.bgColor;
+			};
+			function changeBg(){
+				setState({bgColor:'orange'});
+				draw(box);
+			}
+
+
+		})(window,document);
+	};
+</script>
+</html>

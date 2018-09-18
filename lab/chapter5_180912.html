@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>view</title>
+	<link rel="stylesheet" href="chapter5_180912.css">
+	<script type="text/javascript">
+		'use strict';
+		//selectAll
+		function selectAll(selector, parentDOM){
+		  return Array.prototype.slice.call(parentDOM.querySelectorAll(selector));
+		}
+		//selectOne
+		function selectOne(selector, parentDOM){
+		  return selectAll(selector, parentDOM)[0];
+		}
+		//setState
+		function setState(state, newState){
+		  Object.assign(state, newState);
+		  console.log(state);
+		}
+
+		//addClass
+		function addClass(elem, className){
+			elem.classList.value += ' ' + className;
+		}
+		function removeClass(elem, className){
+			elem.classList.value = elem.classList.value.replace(className, '');
+		}
+	  </script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="head"></div>
+		<div class="main">
+			<div class="article">
+				<button type="button" class="btn">click</button>
+				<div class="news">
+					<div class="box">A</div>
+					<div class="box">
+						<div class="item">B</div>
+						<div class="item">C</div>
+					</div>
+				</div>
+				<div class="live">
+					<strong>실시간 검색어 순위</strong>
+					<ol class="list_rank">
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+						<li><a href="javascript:;" class="link_rank"></a></li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div class="foot"></div>
+	</div>
+	<script type="text/javascript">
+		'use strict';
+
+		window.onload = function(){
+			(function(exports, doc){
+				//선언부
+				//const
+				var DAUM_QUERY_STRING = 'https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=';
+				var LIVE_RANKING_URL = 'http://172.28.31.229:3000/crawl';
+				//value
+				var state = {};
+				var initialSetting = {
+					headBg:'skyblue',
+					mainBg:'gray',
+					footBg:'navy',
+					headHeight:'200',
+					mainHeight:'500',
+					footHeight:'300',
+					newsType:'type1'
+				};
+				//elems
+				var ctx = selectOne('.wrapper',doc); //기준점
+				var elemHead = selectOne('.head', ctx);
+				var elemMain = selectOne('.main', ctx);
+				var elemFoot = selectOne('.foot', ctx);
+				var elemRankList = selectAll('.list_rank .link_rank', elemMain);
+				var elemNews = selectOne('.news', elemMain);
+				var elemBtnNews = selectOne('.btn', elemMain);
+
+
+				//실행부
+				init();
+
+				//함수부
+				function init(){
+					requestApiByHXR('GET',LIVE_RANKING_URL, getData);
+					setState(state, initialSetting);
+					drawHead(elemHead);
+					drawMain(elemMain);
+					drawFoot(elemFoot);
+					drawNews(state.newsType);
+					bindEvent();
+				}
+				function bindEvent(){
+					elemBtnNews.addEventListener('click', function(){
+						setState(state, {newsType:'type2'});
+						drawNews(state.newsType);
+					})
+				}
+				
+				function requestApiByHXR(type, url, getData){
+					var xhr = new XMLHttpRequest();
+					xhr.addEventListener("readystatechange", function(){
+					if(this.readyState === 4){
+						getData(JSON.parse(this.responseText));
+					}
+					});
+					xhr.open(type, url);
+					xhr.setRequestHeader("content-type", "application/json");
+					xhr.setRequestHeader("cache-control", "no-cache");
+					xhr.send();
+				}
+
+				function getData(data){
+					console.log('data loaded', data);
+					drwaRankingList(data[0].data);	
+				}
+
+				//draw
+				function drawHead(elem){
+					var elemStyle = elem.style;
+					var elemHeight = state.headHeight;
+					elemStyle.backgroundColor = state.headBg;
+
+					elemStyle.height = 
+						elemHeight === 'auto' ?
+						elemHeight : elemStyle.height = elemHeight + 'px';
+				}
+				function drawMain(elem){
+					var elemStyle = elem.style;
+					var elemHeight = state.mainHeight;
+					elemStyle.backgroundColor = state.mainBg;
+
+					elemStyle.height = 
+						elemHeight === 'auto' ?
+						elemHeight : elemStyle.height = elemHeight + 'px';
+				}
+				function drawFoot(elem){
+					var elemStyle = elem.style;
+					var elemHeight = state.footHeight;
+					elemStyle.backgroundColor = state.footBg;
+
+					elemStyle.height = 
+						elemHeight === 'auto' ?
+						elemHeight : elemStyle.height = elemHeight + 'px';
+				}
+				function drwaRankingList(rankingList){
+					elemRankList.forEach(function(item, index){
+						var rankingItem = rankingList[index];
+						var rank = rankingItem.rank || '';
+						var name = rankingItem.el || '';
+						item.innerText = rank + name;
+						item.href = DAUM_QUERY_STRING + name;
+					});
+				}
+				function drawNews(type){
+					removeClass(elemNews, 'type1');
+					addClass(elemNews, type);
+					
+				}
+
+			})(window,document);
+		};
+	</script>
+</body>
+</html>

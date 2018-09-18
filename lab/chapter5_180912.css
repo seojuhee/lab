@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+*{margin:0;padding:0}
+.article{overflow:hidden}
+.news{float:left;width:400px;height:400px}
+.box{float:left;background-color:pink}
+.item{float:left;width:200px;height:200px;background-color:olivedrab}
+.type1 .box{width:400px;height:200px}
+.type2 .box{width:200px;height:400px}
+.live{float:right;width:200px;background-color:#fff}
+.list_rank{list-style:none}
