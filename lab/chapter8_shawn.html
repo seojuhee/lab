@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+	'use strict';
+	(function(exports,doc){
+		//햄버거 만들기
+		//생성자 함수
+		// var opts = {
+		// 	bread : '호밀빵',
+		// 	source : '특별한소스',
+		// 	petty : '순쇠고기패티',
+		// 	veges : ['양상추','토마토','피클','양파'],
+		// 	ingredients : ['치즈']
+		// }
+		function Hamburger(opts){
+			this.opts = opts || {};
+			this.bread = opts.bread || '기본빵';
+			this.source = opts.source || '기본소스';
+			this.petty = opts.petty || '기본패티';
+			this.veges = opts.veges || [];
+			this.ingredients = opts.ingredients || [];
+			this.creat();
+		};
+
+		//프로토타입 함수
+		Hamburger.prototype.bake = function(){
+			console.log(this.bread + ' 꿉꿉');
+			return this;
+		};
+		Hamburger.prototype.addSpecialSource = function(){
+			console.log(this.source + ' 처발처발');
+			return this;
+		};
+		Hamburger.prototype.addPetty = function(){
+			console.log(this.petty + ' 큰거 넣자');
+			return this;
+		};
+		Hamburger.prototype.addVeges = function(){
+			if(this.veges.length > 0){
+				console.log('야채는 맛없는 순서대로 ' + this.veges.join(',') + ' 넣자');
+			} else {
+			console.log('야채는 맛없으니까 빼고')
+			}
+			return this;
+		};
+		Hamburger.prototype.addIngredients = function(){
+			console.log(this.ingredients.join(' + ') + ' 넣자넣자');
+			return this;
+		};
+		Hamburger.prototype.wrap = function(){
+			console.log('포장포장 쿰척쿰척');
+			return this;
+		};
+		Hamburger.prototype.creat = function(){
+			this.bake().addSpecialSource().addPetty().addVeges().addIngredients().wrap();
+		};
+
+		var bigmac = new Hamburger({
+			bread : '',
+			source : '특별한소스',
+			petty : '순쇠고기패티',
+			veges : ['양파'], //'양상추','토마토','피클','양파' 가 있던 흔적만이 남아있다
+			ingredients : ['치즈','감자튀김']
+		});
+		console.log(bigmac);
+
+
+	})(window, document);
+	</script>
+</body>
+</html>

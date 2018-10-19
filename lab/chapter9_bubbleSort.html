@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		'use strict';
+		var arr = [2,7,1,6,5,3];
+		
+		var resultArr = arr.slice();
+
+		function sortData (data) {
+			var len = data.length;
+			for(var i = len-1; i > 0 ; i-=1){
+				for(var j = 1; j <= i ; j+=1){
+					if(data[j-1] > data[j]){ //부등호만 바꾸면 역순으로
+						var temp = data[j-1];
+						data[j-1] = data[j];
+						data[j] = temp;
+					}
+					console.log(j);
+				}
+				console.log(i + '번째');
+			}
+			return data;
+		};
+
+		console.log(sortData(resultArr));
+
+	</script>
+</body>
+</html>

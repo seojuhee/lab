@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>프로토타입 | 션 스쿨</title>
+</head>
+<body>
+프로토 타입
+<script type="text/javascript">
+	'use strict';
+	(function(exports,doc){
+		function Bread(angkko,bread,topping,source){ //생성자 함수(Bread) 네이밍 첫 앞부분 대문자를 사용 약속 - new로 생성
+			//인자는 5개까지_무제한이지만
+			this.angkko = angkko || '팥';
+			this.bread = bread || 'common';
+			this.topping = topping || '치즈';
+			this.source = source || '데리야끼';
+
+			this.pour = function(){
+				console.log('반죽붓기');
+			};
+			this.bake = function(){
+				console.log('굽기');
+			};
+			this.rolling = function(){
+				console.log('돌리기');
+			};
+			this.doTopping = function(){
+				console.log('토핑 넣기');
+			};
+			this.sourcing = function(){
+				console.log('소스 넣기');
+			};
+			this.init = function(){
+				console.log(this.angkko + '빵 제조 시작');
+				this.pour();
+				this.bake();
+				this.rolling();
+
+				console.log(this.angkko + 'and' + this.bread + '빵이됐넹');
+			};
+		}
+
+		var test = new Bread(); //new는 뭐지? - 즉석 : 메모리상에 급 생성
+		var test1 = new Bread('피자', '소시지');
+
+		console.log(test);
+		console.log(test1);
+
+		var orderList = [
+			['문어','밀가루','가쓰오부시','데리야끼'],
+			['계란','밀가루','','소금',''],
+			['초코','밀가루','초콜렛','누텔라']
+		];
+		
+		var boxBread = []
+		for(var i = 0; i < orderList.length; i++){ //length는 뭐지?
+			boxBread.push( //push가 뭐지?
+				new Bread(orderList[i][0],orderList[i][1],orderList[i][2],orderList[i][3])
+			)
+		}
+		console.log(boxBread);
+
+	})(window, document);
+</script>
+</body>
+</html>
